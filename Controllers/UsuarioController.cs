@@ -35,14 +35,21 @@ namespace ForumApi.Controllers
         public IActionResult Adicionar([FromBody] Usuario usuario){
             JsonResult rs;
             try{
-                rs = new JsonResult (dusuario.Cadastro(usuario));
-                rs.ContentType = "aplication/json";
-                if(!Convert.ToBoolean(rs.Value)){
-                    rs.StatusCode = 404;
-                    rs.Value = "Ocorreu um erro";
+
+                if(!ModelState.IsValid){
+                    return BadRequest(ModelState);
                 }else{
-                    rs.StatusCode = 200;
+                    rs = new JsonResult (dusuario.Cadastro(usuario));
+                    rs.ContentType = "aplication/json";
+                    if(!Convert.ToBoolean(rs.Value)){
+                        rs.StatusCode = 404;
+                        rs.Value = "Ocorreu um erro";
+                    }else{
+                        rs.StatusCode = 200;
+                    }
                 }
+
+                
             }catch(Exception ex){
                 rs = new JsonResult("");
                 rs.StatusCode = 204;
